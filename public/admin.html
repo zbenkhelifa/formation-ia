@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — créer et modifier les formations</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="entete">
+    <div class="conteneur">
+      <a class="logo" href="index.html"><span>&lt;/&gt;</span>Code09 admin</a>
+      <nav class="nav"><a href="espace.html">Mon espace</a></nav>
+    </div>
+  </header>
+
+  <main>
+    <section style="padding-block: 32px 80px;">
+      <div class="conteneur">
+        <p class="message erreur cache" id="refus">Cette page est réservée à l'administrateur.</p>
+
+        <div id="admin" class="cache">
+          <div class="ligne-form" style="align-items: end; margin-bottom: 24px;">
+            <label style="flex: 1 1 260px;">Formation
+              <select id="choix-cours"></select>
+            </label>
+            <button class="btn btn-secondaire btn-petit" id="nouveau-cours" type="button">Nouvelle formation</button>
+          </div>
+
+          <p class="intro" id="ventes"></p>
+
+          <details open>
+            <summary>Réglages de la formation</summary>
+            <form class="pile" id="form-cours" style="max-width: 760px; margin-top: 16px;">
+              <label>Titre <input name="title" required></label>
+              <label>Identifiant d'URL (slug) <input name="slug" required pattern="[a-z0-9-]+" title="minuscules, chiffres et tirets"></label>
+              <label>Sous-titre <input name="subtitle"></label>
+              <label>Description (Markdown) <textarea name="description_md"></textarea></label>
+              <div class="ligne-form">
+                <label style="flex: 1 1 160px;">Prix en euros <input name="prix" type="number" min="0" step="0.01" required></label>
+                <label style="flex: 2 1 260px;">ID de prix Stripe <input name="stripe_price_id" placeholder="price_..."></label>
+              </div>
+              <label class="case"><input type="checkbox" name="published"> Publiée (visible sur le site)</label>
+              <div class="actions" style="margin-top: 0;">
+                <button class="btn btn-petit" type="submit">Enregistrer la formation</button>
+              </div>
+              <p class="message" role="status"></p>
+            </form>
+          </details>
+
+          <h2 style="margin-top: 40px;">Leçons</h2>
+          <div class="admin-grille">
+            <div>
+              <ul class="admin-liste" id="liste-lecons"></ul>
+              <div class="actions" style="margin-top: 12px;">
+                <button class="btn btn-petit" id="nouvelle-lecon" type="button">Ajouter une leçon</button>
+              </div>
+            </div>
+
+            <form class="pile cache" id="form-lecon" style="max-width: none;">
+              <div class="ligne-form">
+                <label style="flex: 0 1 110px;">Jour <input name="position" type="number" min="1" required></label>
+                <label style="flex: 1 1 280px;">Titre <input name="title" required></label>
+              </div>
+              <label>Résumé (affiché sur la page de vente) <input name="summary"></label>
+              <label>Vidéo (lien YouTube, Vimeo ou https) <input name="video_url" type="url" placeholder="https://youtu.be/..."></label>
+              <div>
+                <div class="onglets">
+                  <button class="btn btn-petit" type="button" data-onglet="ecrire">Écrire</button>
+                  <button class="btn btn-secondaire btn-petit" type="button" data-onglet="apercu">Aperçu</button>
+                </div>
+                <textarea name="content_md" id="editeur" aria-label="Contenu de la leçon (Markdown)" style="min-height: 360px; font-family: var(--code); font-size: .9rem;"></textarea>
+                <div class="apercu contenu lecon cache" id="apercu"></div>
+              </div>
+              <label class="case"><input type="checkbox" name="is_free_preview"> Aperçu gratuit (lisible sans achat)</label>
+              <label class="case"><input type="checkbox" name="published"> Publiée</label>
+              <div class="actions" style="margin-top: 0;">
+                <button class="btn btn-petit" type="submit">Enregistrer la leçon</button>
+                <a class="btn btn-secondaire btn-petit" id="voir-lecon" target="_blank" href="#">Voir sur le site</a>
+                <button class="btn btn-danger btn-petit" type="button" id="supprimer-lecon">Supprimer</button>
+              </div>
+              <p class="message" role="status"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="assets/js/admin.js"></script>
+</body>
+</html>

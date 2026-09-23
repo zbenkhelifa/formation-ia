@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Coder avec l'IA en 30 jours — la formation</title>
+  <meta name="description" content="30 jours pour apprendre à créer des sites et des applications avec l'IA, même en partant de zéro. Pensé pour les profs et les débutants.">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="entete">
+    <div class="conteneur">
+      <a class="logo" href="index.html"><span>&lt;/&gt;</span>Code09</a>
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="masquer-mobile" href="#programme">Programme</a>
+        <a class="masquer-mobile" href="#inscription">Tarif</a>
+        <a id="lien-compte" href="connexion.html">Connexion</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Étape 1 du tunnel : la promesse -->
+    <section class="heros seyes">
+      <div class="conteneur">
+        <h1 id="titre-formation">Coder avec l'IA en 30 jours</h1>
+        <p class="intro" id="sous-titre-formation">De zéro à ta première application en ligne, 30 minutes par jour.</p>
+        <div class="actions">
+          <a class="btn" href="#inscription">Je commence la formation</a>
+          <a class="btn btn-secondaire" href="lecon.html?jour=1">Essayer le jour 1 gratuitement</a>
+        </div>
+        <p class="message erreur cache" id="annule" role="status">Paiement annulé : tu n'as pas été débité. Tu peux reprendre quand tu veux.</p>
+      </div>
+    </section>
+
+    <!-- Étape 2 : pour qui, et le problème -->
+    <section>
+      <div class="conteneur deux-col">
+        <div>
+          <h2>Pour toi si…</h2>
+          <p class="intro">Tu as des idées d'outils pour ta classe ou ton activité, mais le code te semble réservé aux informaticiens.</p>
+        </div>
+        <ul class="liste-coches">
+          <li>Tu n'as <strong>jamais écrit une ligne de code</strong>, ou tu as décroché en cours de route.</li>
+          <li>Tu as déjà essayé ChatGPT ou Claude, mais <strong>le code obtenu ne marche pas</strong> ou tu ne sais pas quoi en faire.</li>
+          <li>Tu as <strong>30 minutes par jour</strong>, pas des soirées entières.</li>
+          <li>Tu veux un résultat concret : <strong>un vrai outil en ligne</strong>, pas des exercices abstraits.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Étape 3 : le programme -->
+    <section class="nuit" id="programme">
+      <div class="conteneur">
+        <h2>Le programme, jour par jour</h2>
+        <p class="intro">Quatre semaines qui s'enchaînent : les bases, l'interactivité, les outils des pros, puis une vraie application.</p>
+        <ol class="trente" id="programme-liste" aria-label="Les 30 jours"></ol>
+      </div>
+    </section>
+
+    <!-- Étape 4 : le formateur -->
+    <section>
+      <div class="conteneur deux-col">
+        <div>
+          <h2>Qui suis-je ?</h2>
+        </div>
+        <div>
+          <p>Je m'appelle Zahire. Je suis prof de STI2D et de SNT dans un lycée d'Île-de-France. Je n'ai pas de diplôme d'informatique : j'ai appris seul, le soir, en m'appuyant sur l'IA.</p>
+          <p>Avec cette méthode, j'ai mis en ligne un affichage numérique pour mon lycée, une application de recherche de stages et plusieurs outils pour ma classe. Cette formation, c'est le parcours que j'aurais aimé suivre au début.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Étape 5 : l'offre -->
+    <section class="seyes" id="inscription">
+      <div class="conteneur">
+        <div class="fiche" style="max-width: 560px; margin-inline: auto;">
+          <h2>Accès complet à la formation</h2>
+          <p class="prix"><span id="prix">—</span> <small>paiement unique</small></p>
+          <ul class="liste-coches" style="margin: 20px 0 24px;">
+            <li>Les 30 leçons, capsules vidéo et exercices</li>
+            <li>Les prompts prêts à copier pour chaque étape</li>
+            <li>Un accès à vie, mises à jour comprises</li>
+            <li>Ta progression enregistrée dans ton espace</li>
+          </ul>
+          <form class="pile" id="form-achat" novalidate style="max-width: none;">
+            <label>Ton e-mail <input name="email" type="email" required autocomplete="email" placeholder="prenom.nom@exemple.fr"></label>
+            <label class="case"><input type="checkbox" name="renonciation" required> Je demande l'accès immédiat à la formation et je renonce à mon droit de rétractation dès le début de l'accès.</label>
+            <button class="btn" type="submit" id="bouton-achat">Payer et accéder à la formation</button>
+            <p class="mention">Paiement sécurisé par Stripe. Facture envoyée par e-mail. <a href="mentions-legales.html#cgv">Conditions générales de vente</a>.</p>
+            <p class="message" role="status"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Étape 6 : objections -->
+    <section>
+      <div class="conteneur" style="max-width: 760px;">
+        <h2>Questions fréquentes</h2>
+        <details><summary>Je n'ai vraiment aucune base, c'est grave ?</summary><p>Non, c'est le point de départ prévu. Le jour 1 part de zéro et chaque notion est expliquée avant d'être utilisée.</p></details>
+        <details><summary>Il me faut un ordinateur puissant ?</summary><p>Non. Tout se fait dans le navigateur, y compris sur un Chromebook. Pas besoin de Mac.</p></details>
+        <details><summary>Faut-il payer un abonnement à une IA ?</summary><p>Non. Les versions gratuites des assistants IA suffisent pour suivre la formation.</p></details>
+        <details><summary>Combien de temps ai-je accès ?</summary><p>À vie. Tu avances à ton rythme, même si tu fais une pause de plusieurs semaines.</p></details>
+        <details><summary>Mon établissement peut-il payer ?</summary><p>Oui. Écris-moi depuis la page de contact des mentions légales et je t'envoie un devis.</p></details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pied">
+    <div class="conteneur">
+      <span>© <span id="annee"></span> Zahire Benkhelifa — Code09</span>
+      <nav class="liens-pied" aria-label="Informations légales"><a href="mentions-legales.html">Mentions légales</a><a href="mentions-legales.html#cgv">CGV</a><a href="mentions-legales.html#confidentialite">Confidentialité</a></nav>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { supabase, echapper, formaterPrix, afficherMessage, $ } from "./assets/js/supabase.js";
+    import { COURSE_SLUG } from "./assets/js/config.js";
+
+    $("#annee").textContent = new Date().getFullYear();
+    if (new URLSearchParams(location.search).has("annule")) $("#annule").classList.remove("cache");
+
+    // Formation (titre, prix)
+    const { data: cours } = await supabase.from("courses")
+      .select("title, subtitle, price_cents, currency").eq("slug", COURSE_SLUG).maybeSingle();
+    if (cours) {
+      $("#titre-formation").textContent = cours.title;
+      if (cours.subtitle) $("#sous-titre-formation").textContent = cours.subtitle;
+      $("#prix").textContent = formaterPrix(cours.price_cents, cours.currency);
+    }
+
+    // Programme groupé par semaine
+    const semaines = ["Semaine 1 : les bases", "Semaine 2 : rendre interactif", "Semaine 3 : les outils des pros", "Semaine 4 : une vraie application"];
+    const { data: lecons } = await supabase.rpc("course_outline", { p_slug: COURSE_SLUG });
+    let html = "";
+    (lecons || []).forEach((l) => {
+      const s = Math.min(Math.floor((l.position - 1) / 7), 3);
+      if ((l.position - 1) % 7 === 0 && l.position <= 22) html += `<li class="semaine">${semaines[s]}</li>`;
+      html += `<li class="jour"><span class="num">Jour ${l.position}</span><span class="titre">${echapper(l.title)}</span>
+        ${l.is_free_preview ? `<a class="badge" href="lecon.html?jour=${l.position}">Gratuit : lire</a>` : ""}</li>`;
+    });
+    $("#programme-liste").innerHTML = html;
+
+    // Tunnel : création de la session de paiement Stripe
+    const form = $("#form-achat");
+    const msg = form.querySelector(".message");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!form.renonciation.checked) {
+        afficherMessage(msg, "Coche la case d'accès immédiat pour continuer.", "erreur");
+        return;
+      }
+      const email = form.email.value.trim();
+      if (!form.email.checkValidity() || !email) {
+        afficherMessage(msg, "Indique une adresse e-mail valide : c'est elle qui te donnera accès à la formation.", "erreur");
+        return;
+      }
+      $("#bouton-achat").disabled = true;
+      afficherMessage(msg, "Redirection vers le paiement sécurisé…");
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { course_slug: COURSE_SLUG, email },
+      });
+      if (error || !data?.url) {
+        $("#bouton-achat").disabled = false;
+        afficherMessage(msg, "Le paiement n'a pas pu démarrer. Réessaie dans un instant.", "erreur");
+        return;
+      }
+      location.href = data.url;
+    });
+  </script>
+</body>
+</html>

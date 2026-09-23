@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Merci ! — Coder avec l'IA</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="entete">
+    <div class="conteneur">
+      <a class="logo" href="index.html"><span>&lt;/&gt;</span>Code09</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Dernière étape du tunnel : confirmation + accès -->
+    <section class="seyes" style="min-height: 70vh;">
+      <div class="conteneur">
+        <div class="fiche" style="max-width: 600px; margin-inline: auto;">
+          <h1 style="font-size: 2.4rem;">Bienvenue dans la formation !</h1>
+          <p>Ton paiement est confirmé et ta facture arrive par e-mail. Il te reste une étape pour ouvrir le jour 1 :</p>
+          <ol>
+            <li>Indique ci-dessous <strong>l'e-mail utilisé pour payer</strong>.</li>
+            <li>Clique sur le lien de connexion reçu.</li>
+            <li>Ton espace s'ouvre avec les 30 jours débloqués.</li>
+          </ol>
+          <form class="pile" id="form-acces" novalidate style="max-width: none; margin-top: 20px;">
+            <label>E-mail utilisé pour le paiement <input name="email" type="email" required autocomplete="email"></label>
+            <button class="btn" type="submit">Recevoir mon lien d'accès</button>
+            <p class="message" role="status"></p>
+          </form>
+          <p class="mention" style="margin-top: 20px;">Un souci ? Écris-moi à l'adresse indiquée dans les <a href="mentions-legales.html">mentions légales</a> avec l'e-mail de ton reçu Stripe.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { supabase, afficherMessage, $ } from "./assets/js/supabase.js";
+
+    const form = $("#form-acces");
+    const msg = form.querySelector(".message");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = form.email.value.trim().toLowerCase();
+      if (!email || !form.email.checkValidity()) {
+        afficherMessage(msg, "Indique une adresse e-mail valide.", "erreur");
+        return;
+      }
+      form.querySelector("button").disabled = true;
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: `${location.origin}/espace.html` },
+      });
+      form.querySelector("button").disabled = false;
+      afficherMessage(
+        msg,
+        error ? "L'envoi a échoué. Attends une minute et réessaie." : `C'est parti : lien envoyé à ${email}.`,
+        error ? "erreur" : "ok",
+      );
+    });
+  </script>
+</body>
+</html>

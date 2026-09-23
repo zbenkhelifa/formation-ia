@@ -1,0 +1,4 @@
+supabase/.env
+.firebaserc
+.firebase/
+node_modules/

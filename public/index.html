@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prof le jour, développeur le soir — Zahire Benkhelifa</title>
+  <meta name="description" content="Apprends à créer des sites et des outils avec l'IA, même si tu n'as jamais codé. Formation en 30 jours, pensée pour les profs et les débutants.">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="entete">
+    <div class="conteneur">
+      <a class="logo" href="index.html"><span>&lt;/&gt;</span>Code09</a>
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="masquer-mobile" href="formation.html">La formation</a>
+        <a class="masquer-mobile" href="#newsletter">Newsletter</a>
+        <a id="lien-compte" href="connexion.html">Connexion</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="heros seyes">
+      <div class="conteneur">
+        <h1>Tu enseignes le jour. Le soir, tu construis tes propres outils.</h1>
+        <p class="intro">Je suis prof de STI2D et développeur autodidacte. J'ai appris à coder avec l'IA, sans diplôme d'informatique et sans Mac. Je t'apprends à faire pareil, <span class="surligne">30 minutes par jour</span>.</p>
+        <div class="actions">
+          <a class="btn" href="formation.html">Découvrir la formation</a>
+          <a class="btn btn-secondaire" href="#newsletter">Recevoir les conseils gratuits</a>
+        </div>
+        <p class="signature">— Zahire, <b>prof le jour, développeur le soir</b></p>
+      </div>
+    </section>
+
+    <section>
+      <div class="conteneur deux-col">
+        <div>
+          <h2>Ce que j'ai construit avec l'IA</h2>
+          <p class="intro">Des outils qui servent vraiment, dans ma classe et au-delà.</p>
+        </div>
+        <ul class="liste-coches">
+          <li><strong>Un affichage numérique</strong> pour les couloirs du lycée, installable comme une appli.</li>
+          <li><strong>Une application de recherche de stages</strong> pour les élèves de voie pro.</li>
+          <li><strong>Un sondage anonyme</strong> sur le climat de classe, sans serveur.</li>
+          <li><strong>Un parapheur PDF</strong> pour signer et annoter des documents dans le navigateur.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="nuit">
+      <div class="conteneur">
+        <h2>Coder avec l'IA en 30 jours</h2>
+        <p class="intro">Une leçon courte par jour, une capsule vidéo et un exercice concret. À la fin, ton propre projet est en ligne.</p>
+        <ol class="trente" id="apercu-programme" aria-label="Les 30 jours"></ol>
+        <div class="actions"><a class="btn" href="formation.html">Voir le programme complet</a></div>
+      </div>
+    </section>
+
+    <section id="newsletter">
+      <div class="conteneur deux-col">
+        <div>
+          <h2>Un conseil par semaine, gratuitement</h2>
+          <p class="intro">Un prompt, un outil ou une astuce pour coder avec l'IA. Pas de spam, désinscription en un clic.</p>
+        </div>
+        <form class="pile" id="form-newsletter" novalidate>
+          <label>Prénom <input name="first_name" autocomplete="given-name"></label>
+          <label>E-mail <input name="email" type="email" required autocomplete="email"></label>
+          <div class="pot-de-miel" aria-hidden="true"><label>Site web <input name="website" tabindex="-1" autocomplete="off"></label></div>
+          <button class="btn" type="submit">Je m'inscris</button>
+          <p class="mention">En t'inscrivant, tu acceptes de recevoir la newsletter. Voir la <a href="mentions-legales.html#confidentialite">politique de confidentialité</a>.</p>
+          <p class="message" role="status"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pied">
+    <div class="conteneur">
+      <span>© <span id="annee"></span> Zahire Benkhelifa — Code09</span>
+      <nav class="liens-pied" aria-label="Informations légales"><a href="mentions-legales.html">Mentions légales</a><a href="mentions-legales.html#cgv">CGV</a><a href="mentions-legales.html#confidentialite">Confidentialité</a></nav>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { supabase, brancherNewsletter, echapper, $ } from "./assets/js/supabase.js";
+    import { COURSE_SLUG } from "./assets/js/config.js";
+    $("#annee").textContent = new Date().getFullYear();
+    brancherNewsletter($("#form-newsletter"));
+
+    const { data } = await supabase.rpc("course_outline", { p_slug: COURSE_SLUG });
+    $("#apercu-programme").innerHTML = (data || []).slice(0, 7).map((l) => `
+      <li class="jour"><span class="num">Jour ${l.position}</span><span class="titre">${echapper(l.title)}</span>
+      ${l.is_free_preview ? '<span class="badge">Gratuit</span>' : ""}</li>`).join("");
+  </script>
+</body>
+</html>

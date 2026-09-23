@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Leçon — Coder avec l'IA</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="entete">
+    <div class="conteneur">
+      <a class="logo" href="index.html"><span>&lt;/&gt;</span>Code09</a>
+      <nav class="nav" aria-label="Formation">
+        <a href="espace.html">Mon espace</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <article class="conteneur lecon">
+        <p class="signature" id="jour" style="margin: 0 0 8px;"></p>
+        <h1 id="titre" style="font-size: clamp(1.9rem, 5vw, 2.8rem);">Chargement…</h1>
+        <p class="intro" id="resume"></p>
+        <div id="video"></div>
+        <div class="contenu" id="contenu"></div>
+
+        <div id="verrou" class="fiche cache" style="margin-top: 24px;">
+          <h2>Ce jour fait partie de la formation complète</h2>
+          <p id="verrou-texte">Connecte-toi avec l'e-mail de ton achat, ou rejoins la formation pour débloquer les 30 jours.</p>
+          <div class="actions">
+            <a class="btn" href="formation.html#inscription">Rejoindre la formation</a>
+            <a class="btn btn-secondaire" id="lien-connexion" href="connexion.html">Me connecter</a>
+          </div>
+        </div>
+
+        <div class="actions cache" id="bloc-fait">
+          <button class="btn" id="bouton-fait" type="button">J'ai terminé ce jour</button>
+        </div>
+        <p class="message" id="msg" role="status"></p>
+
+        <nav class="nav-lecon" aria-label="Jours précédent et suivant">
+          <a id="precedent" class="btn btn-secondaire btn-petit cache" href="#">Jour précédent</a>
+          <a id="suivant" class="btn btn-petit cache" href="#">Jour suivant</a>
+        </nav>
+      </article>
+    </section>
+  </main>
+
+  <script type="module">
+    import { marked } from "https://cdn.jsdelivr.net/npm/marked@12/+esm";
+    import DOMPurify from "https://cdn.jsdelivr.net/npm/dompurify@3/+esm";
+    import { supabase, urlVideo, afficherMessage, $ } from "./assets/js/supabase.js";
+    import { COURSE_SLUG } from "./assets/js/config.js";
+
+    const params = new URLSearchParams(location.search);
+    const jour = Math.max(1, parseInt(params.get("jour"), 10) || 1);
+    const slug = params.get("cours") || COURSE_SLUG;
+    const lien = (n) => `lecon.html?${slug !== COURSE_SLUG ? `cours=${encodeURIComponent(slug)}&` : ""}jour=${n}`;
+    $("#jour").textContent = `Jour ${jour}`;
+    $("#lien-connexion").href = `connexion.html?retour=${encodeURIComponent(location.pathname + location.search)}`;
+
+    const { data: { session } } = await supabase.auth.getSession();
+    const { data: cours } = await supabase.from("courses").select("id").eq("slug", slug).maybeSingle();
+    const { data: plan } = await supabase.rpc("course_outline", { p_slug: slug });
+    const infos = (plan || []).find((l) => l.position === jour);
+
+    // Navigation
+    const positions = (plan || []).map((l) => l.position);
+    if (positions.includes(jour - 1)) { $("#precedent").href = lien(jour - 1); $("#precedent").classList.remove("cache"); }
+    if (positions.includes(jour + 1)) { $("#suivant").href = lien(jour + 1); $("#suivant").classList.remove("cache"); }
+
+    const { data: lecon } = cours
+      ? await supabase.from("lessons").select("id, title, summary, content_md, video_url")
+          .eq("course_id", cours.id).eq("position", jour).maybeSingle()
+      : { data: null };
+
+    if (!lecon) {
+      // Pas d'accès (ou jour inexistant) : on montre le titre public et le verrou
+      $("#titre").textContent = infos?.title ?? "Jour introuvable";
+      $("#resume").textContent = infos?.summary ?? "";
+      document.title = `${infos?.title ?? "Leçon"} — Coder avec l'IA`;
+      if (infos) {
+        $("#verrou").classList.remove("cache");
+        if (session) $("#verrou-texte").textContent = `Ton compte (${session.user.email}) n'a pas encore accès à ce jour.`;
+      }
+    } else {
+      document.title = `Jour ${jour} : ${lecon.title} — Coder avec l'IA`;
+      $("#titre").textContent = lecon.title;
+      $("#resume").textContent = lecon.summary ?? "";
+      const src = urlVideo(lecon.video_url);
+      if (src) {
+        $("#video").innerHTML = `<div class="video"><iframe src="${encodeURI(src)}" title="Capsule vidéo du jour ${jour}" allow="fullscreen; picture-in-picture" loading="lazy"></iframe></div>`;
+      }
+      $("#contenu").innerHTML = DOMPurify.sanitize(marked.parse(lecon.content_md ?? ""));
+
+      if (session) {
+        const bouton = $("#bouton-fait");
+        $("#bloc-fait").classList.remove("cache");
+        const { data: fait } = await supabase.from("progress").select("lesson_id")
+          .eq("user_id", session.user.id).eq("lesson_id", lecon.id).maybeSingle();
+        const majBouton = (ok) => { bouton.textContent = ok ? "Terminé ✓ (annuler)" : "J'ai terminé ce jour"; bouton.dataset.fait = ok ? "1" : ""; };
+        majBouton(!!fait);
+
+        bouton.addEventListener("click", async () => {
+          bouton.disabled = true;
+          const dejaFait = bouton.dataset.fait === "1";
+          const { error } = dejaFait
+            ? await supabase.from("progress").delete().eq("user_id", session.user.id).eq("lesson_id", lecon.id)
+            : await supabase.from("progress").insert({ user_id: session.user.id, lesson_id: lecon.id });
+          bouton.disabled = false;
+          if (error) { afficherMessage($("#msg"), "La progression n'a pas été enregistrée. Réessaie.", "erreur"); return; }
+          majBouton(!dejaFait);
+          if (!dejaFait && positions.includes(jour + 1)) afficherMessage($("#msg"), "Bravo ! Le jour suivant t'attend.");
+        });
+      }
+    }
+  </script>
+</body>
+</html>

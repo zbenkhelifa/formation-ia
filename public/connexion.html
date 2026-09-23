@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Connexion — Coder avec l'IA</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="entete">
+    <div class="conteneur">
+      <a class="logo" href="index.html"><span>&lt;/&gt;</span>Code09</a>
+      <nav class="nav"><a href="formation.html">La formation</a></nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="seyes" style="min-height: 70vh;">
+      <div class="conteneur">
+        <div class="fiche" style="max-width: 520px; margin-inline: auto;">
+          <h1 style="font-size: 2.2rem;">Accéder à mon espace</h1>
+          <p>Indique l'e-mail utilisé lors de ton achat. Tu reçois un lien de connexion : pas de mot de passe à retenir.</p>
+          <form class="pile" id="form-connexion" novalidate style="max-width: none;">
+            <label>E-mail <input name="email" type="email" required autocomplete="email"></label>
+            <button class="btn" type="submit">Recevoir mon lien de connexion</button>
+            <p class="message" role="status"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { supabase, afficherMessage, $ } from "./assets/js/supabase.js";
+
+    const retour = new URLSearchParams(location.search).get("retour");
+    // N'accepte qu'un chemin interne pour éviter les redirections vers un autre site
+    const cible = retour && retour.startsWith("/") && !retour.startsWith("//") ? retour : "/espace.html";
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) location.replace(cible);
+
+    const form = $("#form-connexion");
+    const msg = form.querySelector(".message");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = form.email.value.trim().toLowerCase();
+      if (!email || !form.email.checkValidity()) {
+        afficherMessage(msg, "Indique une adresse e-mail valide.", "erreur");
+        return;
+      }
+      form.querySelector("button").disabled = true;
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: location.origin + cible },
+      });
+      form.querySelector("button").disabled = false;
+      if (error) {
+        afficherMessage(msg, "L'envoi du lien a échoué. Attends une minute et réessaie.", "erreur");
+        return;
+      }
+      afficherMessage(msg, `Lien envoyé à ${email}. Ouvre-le sur cet appareil (pense à vérifier les spams).`);
+    });
+  </script>
+</body>
+</html>
